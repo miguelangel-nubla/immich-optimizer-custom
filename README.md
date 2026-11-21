@@ -5,7 +5,7 @@ A template for building a custom image of [immich-optimizer](https://github.com/
 - a driver for your graphics card
 - another tool, or another version of one
 
-**If you only want your own tasks, you do not need this.** Mount a folder with your `tasks.yaml` over `/etc/immich-optimizer/config` in the official image, as its [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md) describes. That also covers AMD and NVIDIA cards, whose encoders and driver the official image already has: see [Graphics cards](#graphics-cards) for the task and the compose lines.
+**If you only want your own tasks, you do not need this.** Mount a folder with your `tasks.yaml` over `/etc/immich-optimizer/config` in the official image, as its [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/tasks.md) describes. That also covers AMD and NVIDIA cards, whose encoders and driver the official image already has: see [Graphics cards](#graphics-cards) for the task and the compose lines.
 
 You edit two files. GitHub builds the image and publishes it to your own repository; nothing has to be installed on your computer.
 
@@ -21,7 +21,7 @@ You edit two files. GitHub builds the image and publishes it to your own reposit
        image: ghcr.io/<your-user>/<your-repository>:latest
    ```
 
-The image is private at first, like every new package on GitHub. Either make it public (your profile → **Packages** → the package → **Package settings** → **Change visibility**), or log in on your server with `docker login ghcr.io`.
+GitHub publishes every new image as private, also from a public repository: a package takes over the repository's access rights, not its visibility. Either make it public (your profile → **Packages** → the package → **Package settings** → **Change visibility**), or log in on your server with `docker login ghcr.io`.
 
 ## Change it
 
@@ -29,12 +29,13 @@ The image is private at first, like every new package on GitHub. Either make it 
 |---|---|
 | [`Dockerfile`](Dockerfile) | what is in the image. Every optional part is commented out and explained there. |
 | [`config/tasks.yaml`](config/tasks.yaml) | the tasks your image starts with, so that what you add to the image is used without further setup. It is the official lossless profile, with examples commented out. A folder mounted over `/etc/immich-optimizer/config` still replaces it. |
+| `profiles/` (you create it) | your own [profiles](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/library.md#profiles) for library mode, one folder each with a `tasks.yaml`: for the photos you tag `immich-optimizer/convert/<profile>`. Switch on the `profiles/` line in the `Dockerfile`. |
 
 To switch a part on, remove the leading `# ` from its lines and commit. You can do that in the browser: open the file on GitHub, press the pencil, edit, **Commit changes**. Every commit to `main` builds and publishes a new image.
 
 A build that fails publishes nothing: your last working image stays. The log on the **Actions** tab says what went wrong. Before publishing, the build checks that the optimizer starts with your tasks file, which catches most typing mistakes. It does not convert anything, so whether a task does what you want, you see with a real file.
 
-How tasks work is described in the [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md).
+How tasks work is described in the [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/tasks.md).
 
 ## When it is built
 
@@ -127,4 +128,4 @@ To take over later changes of this template, use **Sync fork**. A repository mad
 
 ## What this is not
 
-It does not build the optimizer itself: the program comes from the official image. To change the program, see the [main repository](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/development.md).
+It does not build the optimizer itself: the program comes from the official image. To change the program, see the [main repository](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/development.md).

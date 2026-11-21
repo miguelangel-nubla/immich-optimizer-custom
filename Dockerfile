@@ -108,5 +108,14 @@ USER root
 # ---------------------------------------------------------------------------
 COPY --chown=appuser:appuser config/ /etc/immich-optimizer/config/
 
+# ---------------------------------------------------------------------------
+# Profiles for library mode (0.4 and later): other sets of tasks, used for
+# the assets you tag immich-optimizer/convert/<profile> in Immich. Make a
+# folder profiles/<profile>/ with a tasks.yaml (and any scripts it calls),
+# then switch this line on. A profile named like a bundled one (lossless,
+# profile1) replaces it.
+# ---------------------------------------------------------------------------
+# COPY --chown=appuser:appuser profiles/ /etc/immich-optimizer/profiles/
+
 # Back to the unprivileged user the official image runs as (uid 1001).
 USER appuser

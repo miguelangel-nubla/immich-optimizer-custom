@@ -2,7 +2,7 @@
 # "lossless" profile: JPEG and PNG become JPEG XL without any loss, everything
 # else is stored as it is.
 #
-# Documentation: https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md
+# Documentation: https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/tasks.md
 #
 # How tasks are picked: for each file, the tasks that list its extension are
 # tried from top to bottom until one succeeds. So an example you switch on
