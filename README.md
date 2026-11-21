@@ -2,9 +2,10 @@
 
 A template for building a custom image of [immich-optimizer](https://github.com/miguelangel-nubla/immich-optimizer): the official image plus whatever you add. Use it when you need something the official image does not have:
 
-- video encoding on a graphics card (AMD, Intel, NVIDIA)
+- a driver for your graphics card
 - another tool, or another version of one
-- your own tasks, built into the image
+
+**If you only want your own tasks, you do not need this.** Mount a folder with your `tasks.yaml` over `/etc/immich-optimizer/config` in the official image, as its [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md) describes. That also covers AMD and NVIDIA cards, whose encoders and driver the official image already has: see [Graphics cards](#graphics-cards) for the task and the compose lines.
 
 You edit two files. GitHub builds the image and publishes it to your own repository; nothing has to be installed on your computer.
 
@@ -27,7 +28,7 @@ The image is private at first, like every new package on GitHub. Either make it 
 | File | What it is |
 |---|---|
 | [`Dockerfile`](Dockerfile) | what is in the image. Every optional part is commented out and explained there. |
-| [`config/tasks.yaml`](config/tasks.yaml) | the tasks: which command converts which file type. It starts as the official lossless profile, with examples commented out. |
+| [`config/tasks.yaml`](config/tasks.yaml) | the tasks your image starts with, so that what you add to the image is used without further setup. It is the official lossless profile, with examples commented out. A folder mounted over `/etc/immich-optimizer/config` still replaces it. |
 
 To switch a part on, remove the leading `# ` from its lines and commit. You can do that in the browser: open the file on GitHub, press the pencil, edit, **Commit changes**. Every commit to `main` builds and publishes a new image.
 

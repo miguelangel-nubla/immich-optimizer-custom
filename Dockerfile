@@ -100,8 +100,11 @@ USER root
 # COPY --from=optimizer /immich-optimizer /usr/local/bin/immich-optimizer
 
 # ---------------------------------------------------------------------------
-# Your tasks: everything in config/ replaces the image's default tasks file.
-# Scripts next to tasks.yaml can be called from a task as ./script.sh.
+# The tasks the image starts with: everything in config/ replaces the official
+# image's default tasks file, so that a tool or driver added above is used
+# without further setup. Scripts next to tasks.yaml can be called from a task
+# as ./script.sh. A folder mounted over /etc/immich-optimizer/config at run
+# time still replaces all of it; for tasks alone you need no custom image.
 # ---------------------------------------------------------------------------
 COPY --chown=appuser:appuser config/ /etc/immich-optimizer/config/
 

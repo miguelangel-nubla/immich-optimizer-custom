@@ -18,7 +18,7 @@ docker run --rm "$IMAGE" immich-optimizer -version
 # Proxy mode needs nothing but an address. It keeps running when the tasks
 # file is fine, so being stopped by the timeout (exit 124) is the good result.
 set +e
-out=$(docker run --rm -e IO_MODE=proxy -e IO_IMMICH_URL=http://127.0.0.1:9 "$IMAGE" timeout 5 immich-optimizer 2>&1)
+out=$(docker run --rm "$IMAGE" timeout 5 immich-optimizer -mode proxy -immich_url http://127.0.0.1:9 2>&1)
 code=$?
 set -e
 if [ "$code" != 124 ]; then
