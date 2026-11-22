@@ -131,7 +131,7 @@ Collected from the custom images people built before this template:
 - **Changing the base image.** Images moved to Alpine lost HEIC decoding until more packages were added, and images on Debian "sid" broke when two build steps picked up different library versions. This template keeps the official image as its base for that reason.
 - **Graphics card images are for `linux/amd64`.** Drop `linux/arm64` from `PLATFORMS` when a block you switch on says so.
 - **Tools compiled for one processor** (`-march=...`) crashed on another.
-- **HandBrake with NVIDIA or Quick Sync** needs a HandBrake built for it, which Debian's is not. The examples here use `ffmpeg`, whose Debian build has the NVIDIA and VAAPI encoders.
+- **HandBrake with NVIDIA or Quick Sync** needs a HandBrake built for it, which Debian's is not. The examples here use `ffmpeg`, whose Debian build has the NVIDIA and VAAPI encoders. How the two compare, and how to keep a video's date and location with either, is in [HandBrake or ffmpeg](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md#video-handbrake-or-ffmpeg).
 
 ## Forks
 
