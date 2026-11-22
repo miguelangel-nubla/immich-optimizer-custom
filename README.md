@@ -5,7 +5,7 @@ A template for building a custom image of [immich-optimizer](https://github.com/
 - a driver for your graphics card
 - another tool, or another version of one
 
-**If you only want your own tasks, you do not need this.** Mount a folder with your `tasks.yaml` over `/etc/immich-optimizer/config` in the official image, as its [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/tasks.md) describes. That also covers AMD and NVIDIA cards, whose encoders and driver the official image already has: see [Graphics cards](#graphics-cards) for the task and the compose lines.
+**If you only want your own tasks, you do not need this.** Mount a folder with your `tasks.yaml` over `/etc/immich-optimizer/config` in the official image, as its [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md) describes. That also covers AMD and NVIDIA cards, whose encoders and driver the official image already has: see [Graphics cards](#graphics-cards) for the task and the compose lines.
 
 You edit two files. GitHub builds the image and publishes it to your own repository; nothing has to be installed on your computer.
 
@@ -29,13 +29,13 @@ GitHub publishes every new image as private, also from a public repository: a pa
 |---|---|
 | [`Dockerfile`](Dockerfile) | what is in the image. Every optional part is commented out and explained there. |
 | [`config/tasks.yaml`](config/tasks.yaml) | the tasks your image starts with, so that what you add to the image is used without further setup. It is the official lossless profile, with examples commented out. A folder mounted over `/etc/immich-optimizer/config` still replaces it. |
-| `profiles/` (you create it) | your own [profiles](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/library.md#profiles) for library mode, one folder each with a `tasks.yaml`: for the photos you tag `immich-optimizer/convert/<profile>`. Switch on the `profiles/` line in the `Dockerfile`. |
+| `profiles/` (you create it) | your own [profiles](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/library.md#profiles) for library mode, one folder each with a `tasks.yaml`: for the photos you tag `immich-optimizer/convert/<profile>`. Switch on the `profiles/` line in the `Dockerfile`. |
 
 To switch a part on, remove the leading `# ` from its lines and commit. You can do that in the browser: open the file on GitHub, press the pencil, edit, **Commit changes**. Every commit to `main` builds and publishes a new image.
 
 A build that fails publishes nothing: your last working image stays. The log on the **Actions** tab says what went wrong. Before publishing, the build checks that the optimizer starts with your tasks file, which catches most typing mistakes. It does not convert anything, so whether a task does what you want, you see with a real file.
 
-How tasks work is described in the [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/tasks.md).
+How tasks work is described in the [tasks documentation](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/tasks.md).
 
 ## When it is built
 
@@ -52,6 +52,22 @@ By default the image is built on the newest official release. To stay on one ver
 The official image already has `ffmpeg` with the encoders for NVIDIA and for VAAPI (AMD and Intel), and the open-source VAAPI driver for AMD. Intel needs a driver added in the `Dockerfile`. Beyond that, what is missing is on your side: the container has to be given the card, and a task has to use it.
 
 The examples in `config/tasks.yaml` were written from the documentation of the encoders. **They have not been run on real graphics cards**: check the result of the first conversions.
+
+### Graphics card or CPU
+
+**For the optimizer, the CPU is usually the better choice.** The optimizer is there to save space, and its conversions run in the background, where nobody waits for them. What counts is the size of the result, not how fast it is made.
+
+| | Graphics card (`videos-nvenc-hevc`, `videos-vaapi-hevc`) | CPU (`videos-x265`, `videos-svtav1`) |
+|---|---|---|
+| Speed | many times faster | slow, AV1 most of all |
+| Load on the server | little: the CPU stays free | high while a video is converted |
+| Size at the same quality | larger | smaller |
+| Settings to tune | few | many |
+| Setup | the card in compose, a driver for Intel | none: works in the official image |
+
+- **A larger result often saves nothing.** A result that is not smaller than the original is thrown away and the original is kept. Video from recent phones is already compressed well, so a graphics card's output is more often too large to be used.
+- **Use a graphics card** when you convert a lot of video, your CPU cannot keep up, and you accept saving less space for it.
+- **To keep the CPU from taking over the server**, limit how many conversions run at once with `IO_TASKS_CONCURRENCY`, or give the container a CPU limit (`cpus:` in compose).
 
 ### AMD and Intel (VAAPI)
 
@@ -128,4 +144,4 @@ To take over later changes of this template, use **Sync fork**. A repository mad
 
 ## What this is not
 
-It does not build the optimizer itself: the program comes from the official image. To change the program, see the [main repository](https://github.com/miguelangel-nubla/immich-optimizer/blob/dev/docs/development.md).
+It does not build the optimizer itself: the program comes from the official image. To change the program, see the [main repository](https://github.com/miguelangel-nubla/immich-optimizer/blob/main/docs/development.md).
